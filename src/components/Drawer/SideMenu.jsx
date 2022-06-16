@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
+import { blue } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
+import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -15,9 +18,11 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import NoteOutlinedIcon from '@mui/icons-material/NoteOutlined';
 
 function DrawerItems() {
+  const { pathname } = useLocation();
+
   const items = [
-    { name: 'Menu', Icon: MenuBookIcon },
-    { name: 'Category', Icon: NoteOutlinedIcon },
+    { name: 'Menu', Icon: MenuBookIcon, url: '/menu' },
+    { name: 'Category', Icon: NoteOutlinedIcon, url: '/category' },
   ];
 
   return (
@@ -26,17 +31,30 @@ function DrawerItems() {
       <Divider />
       <List>
         {items.map((item) => {
-          const { name, Icon } = item;
+          const { name, Icon, url } = item;
 
           return (
-            <ListItem key={name} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <Icon />
-                </ListItemIcon>
-                <ListItemText primary={name} />
-              </ListItemButton>
-            </ListItem>
+            <Link key={name} to={url} component={RouterLink} underline="none">
+              <ListItem
+                disablePadding
+                sx={{ background: url === pathname && blue[100] }}
+              >
+                <ListItemButton>
+                  <ListItemIcon>
+                    <Icon
+                      sx={{ color: url === pathname ? blue[700] : '#444' }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={name}
+                    primaryTypographyProps={{
+                      fontWeight: 'bold',
+                      color: url === pathname ? blue[700] : '#444',
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
           );
         })}
       </List>

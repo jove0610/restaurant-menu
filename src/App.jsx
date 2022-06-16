@@ -1,14 +1,16 @@
 import React from 'react';
+import { HashRouter } from 'react-router-dom';
 
+import AppRoutes from './Routes';
 import Drawer from './components/Drawer';
 
 function App() {
   return (
-    <div className="App">
+    <HashRouter>
       <Drawer>
-        <h1>Hello World</h1>
+        <AppRoutes />
       </Drawer>
-    </div>
+    </HashRouter>
   );
 }
 
