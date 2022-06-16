@@ -12,10 +12,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
 
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import NoteOutlinedIcon from '@mui/icons-material/NoteOutlined';
+
+import companyLogo from '../../assets/images/company-logo.png';
 
 function DrawerItems() {
   const { pathname } = useLocation();
@@ -27,7 +28,7 @@ function DrawerItems() {
 
   return (
     <>
-      <Toolbar />
+      <Box component="img" src={companyLogo} width="80%" m="1em auto" />
       <Divider />
       <List>
         {items.map((item) => {
