@@ -13,8 +13,8 @@ function TopMenu({ drawerWidth, handleDrawerToggle }) {
     <AppBar
       position="fixed"
       sx={{
-        width: { sm: `calc(100% - ${drawerWidth})` },
-        ml: { sm: `${drawerWidth}` },
+        width: { md: `calc(100% - ${drawerWidth})` },
+        ml: { md: `${drawerWidth}` },
       }}
     >
       <Toolbar>
@@ -23,7 +23,7 @@ function TopMenu({ drawerWidth, handleDrawerToggle }) {
           aria-label="open drawer"
           edge="start"
           onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: 'none' } }}
+          sx={{ mr: 2, display: { md: 'none' } }}
         >
           <MenuIcon />
         </IconButton>

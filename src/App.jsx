@@ -5,7 +5,11 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import AppRoutes from './Routes';
 import Drawer from './components/Drawer';
+
+import initFirebase from './firebase/init';
 import theme from './styles/theme';
+
+initFirebase();
 
 function App() {
   return (

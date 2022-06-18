@@ -10,6 +10,15 @@ const theme = createTheme({
       letterSpacing: '0.01204em',
     },
   },
+  components: {
+    MuiFormLabel: {
+      styleOverrides: {
+        asterisk: {
+          color: '#db3131',
+        },
+      },
+    },
+  },
 });
 
 export default theme;
