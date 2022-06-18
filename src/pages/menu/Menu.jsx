@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import { useCategories } from '../../firebase/categories';
 import { useMenu } from '../../firebase/menu';
 import AddMenu from './components/AddMenu';
+import MenuItems from './components/MenuItems';
 
 function Menu() {
   const categories = useCategories();
@@ -29,11 +30,15 @@ function Menu() {
       }}
     >
       {!openMenu && (
-        <Stack alignItems="flex-end">
-          <Button variant="outlined" onClick={() => setOpenMenu(true)}>
-            Add Menu
-          </Button>
-        </Stack>
+        <>
+          <Stack alignItems="flex-end">
+            <Button variant="outlined" onClick={() => setOpenMenu(true)}>
+              Add Menu
+            </Button>
+          </Stack>
+
+          <MenuItems menu={menu} />
+        </>
       )}
 
       {openMenu && (

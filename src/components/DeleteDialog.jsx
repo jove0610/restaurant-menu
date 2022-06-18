@@ -9,17 +9,15 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 
-import { deleteCategory } from '../../../firebase/categories';
-
-function DeleteDialog({ open, setOpen, category }) {
+function DeleteDialog({ open, setOpen, itemName, onDelete }) {
   const onClickDelete = () => {
     setOpen(false);
-    deleteCategory(category);
+    onDelete(itemName);
   };
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Delete {category.name}?</DialogTitle>
+      <DialogTitle>Delete {itemName}?</DialogTitle>
 
       <Divider />
 
@@ -44,9 +42,8 @@ function DeleteDialog({ open, setOpen, category }) {
 DeleteDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  category: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-  }).isRequired,
+  itemName: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default DeleteDialog;

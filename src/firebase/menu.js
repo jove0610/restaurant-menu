@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDatabase, ref, set, onValue } from 'firebase/database';
+import { getDatabase, ref, set, onValue, update } from 'firebase/database';
 
 export const addMenu = ({ name, category, options }) => {
   const db = getDatabase();
@@ -31,4 +31,18 @@ export const useMenu = () => {
   }, []);
 
   return data;
+};
+
+export const deleteMenu = (data) => {
+  const db = getDatabase();
+  const updates = {};
+  updates[`/menu/${data.name}`] = null;
+  updates[`/options/${data.name}`] = null;
+
+  if ('category' in data) {
+    updates[`/category/${data.category}/menu/${data.name}`] = null;
+  }
+  updates[`/categories/${data.name}`] = null;
+
+  update(ref(db), updates);
 };
