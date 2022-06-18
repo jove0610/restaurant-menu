@@ -33,5 +33,12 @@ export const deleteCategory = (data) => {
   const updates = {};
   updates[`/categories/${data.name}`] = null;
 
+  if ('menu' in data) {
+    Object.keys(data.menu).forEach((menuName) => {
+      updates[`/menu/${menuName}/category`] = null;
+    });
+  }
+  updates[`/categories/${data.name}`] = null;
+
   update(ref(db), updates);
 };
