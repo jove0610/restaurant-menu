@@ -37,7 +37,7 @@ function EditDialog({ open, setOpen, menuItem: menu, onEdit, categories }) {
     setOpen(false);
     setErrMessage('');
     setNewMenuName(menu.name);
-    setNewCategory(menu.category);
+    setNewCategory(menu.category || null);
   };
 
   const onSubmitEdit = (e) => {
@@ -68,10 +68,6 @@ function EditDialog({ open, setOpen, menuItem: menu, onEdit, categories }) {
         <Divider />
 
         <DialogContent>
-          {/* <DialogContentText>
-            Enter the new name of this category.
-          </DialogContentText> */}
-
           <Stack spacing="1.5em">
             <TextField
               value={newMenuName}
