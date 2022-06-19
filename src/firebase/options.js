@@ -44,6 +44,16 @@ export const useOptionsByName = (name = null) => {
   return data;
 };
 
+export const editOptionItem = async (menuName, oldData, newData) => {
+  const db = getDatabase();
+
+  const updates = {};
+  updates[`options/${menuName}/${oldData.name}`] = null;
+  updates[`options/${menuName}/${newData.name}`] = newData;
+
+  update(ref(db), updates);
+};
+
 export const deleteOptionItem = (menuName, itemName) => {
   const db = getDatabase();
   const updates = {};

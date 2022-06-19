@@ -23,12 +23,20 @@ import {
 } from '../../../../firebase/options';
 import AddOptionDialog from './AddOptionDialog';
 import DeleteDialog from '../../../../components/DeleteDialog';
+import EditOptionDialog from './EditOptionDialog';
 
 function MenuItemOptions({ setOpen, menuName }) {
   const options = useOptionsByName(menuName);
   const [dialogItemName, setDialogItemName] = useState('');
   const [openAddOption, setOpenAddOption] = useState(false);
+  const [openEditOption, setOpenEditOption] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [optionToBeEdited, setOptionToBeEdited] = useState({
+    name: '',
+    price: 0,
+    cost: 0,
+    stock: 0,
+  });
 
   const getOptionName = (name) => {
     if (name !== '_defaultOptionName') {
@@ -41,6 +49,11 @@ function MenuItemOptions({ setOpen, menuName }) {
     }
 
     return null;
+  };
+
+  const onClickEditIcon = (option) => {
+    setOptionToBeEdited(option);
+    setOpenEditOption(true);
   };
 
   const onClickDeleteIcon = (itemName) => {
@@ -107,7 +120,7 @@ function MenuItemOptions({ setOpen, menuName }) {
                   <Stack direction="row">
                     <Tooltip title="Edit" arrow>
                       <IconButton
-                        // onClick={() => onClickEditIcon(categoryName)}
+                        onClick={() => onClickEditIcon(option)}
                         sx={{ color: yellow[800] }}
                       >
                         <EditIcon />
@@ -138,6 +151,14 @@ function MenuItemOptions({ setOpen, menuName }) {
 
       {openAddOption && (
         <AddOptionDialog menuName={menuName} setOpen={setOpenAddOption} />
+      )}
+
+      {openEditOption && (
+        <EditOptionDialog
+          menuName={menuName}
+          setOpen={setOpenEditOption}
+          option={optionToBeEdited}
+        />
       )}
 
       <DeleteDialog
