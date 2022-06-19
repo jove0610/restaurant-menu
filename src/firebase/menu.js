@@ -9,8 +9,13 @@ import {
   child,
 } from 'firebase/database';
 
-export const addMenu = ({ name, category, options }) => {
+export const addMenu = async (name, category, options) => {
   const db = getDatabase();
+
+  const snapshot = await get(child(ref(db), `menu/${name}`));
+  if (snapshot.exists()) {
+    throw new Error('Name already exist.');
+  }
 
   const newOptions = {};
   options.forEach((option) => {
@@ -41,24 +46,22 @@ export const useMenu = () => {
   return data;
 };
 
-export const editMenu = (oldData, newData) => {
+export const editMenu = async (oldData, newData) => {
   const db = getDatabase();
+
   const updates = {};
   updates[`/menu/${oldData.name}`] = null;
   updates[`/menu/${newData.name}`] = newData;
   updates[`/categories/${oldData.category}/menu/${oldData.name}`] = null;
   updates[`/categories/${newData.category}/menu/${newData.name}`] = true;
 
-  get(child(ref(db), `options/${oldData.name}`))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        updates[`/options/${oldData.name}`] = null;
-        updates[`/options/${newData.name}`] = snapshot.val();
-      }
-    })
-    .finally(() => {
-      update(ref(db), updates);
-    });
+  const snapshot = await get(child(ref(db), `options/${oldData.name}`));
+  if (snapshot.exists()) {
+    updates[`/options/${oldData.name}`] = null;
+    updates[`/options/${newData.name}`] = snapshot.val();
+  }
+
+  update(ref(db), updates);
 };
 
 export const deleteMenu = (data) => {

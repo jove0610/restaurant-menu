@@ -53,11 +53,7 @@ function Menu() {
       )}
 
       {openMenu && (
-        <AddMenu
-          categories={categories}
-          menu={menu}
-          handleClose={handleCloseMenu}
-        />
+        <AddMenu categories={categories} handleClose={handleCloseMenu} />
       )}
 
       {openMenuItemOptions && (

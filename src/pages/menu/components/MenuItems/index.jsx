@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreIcon from '@mui/icons-material/More';
 
-import { editMenu, deleteMenu } from '../../../../firebase/menu';
+import { deleteMenu } from '../../../../firebase/menu';
 import DeleteDialog from '../../../../components/DeleteDialog';
 import EditDialog from './EditDialog';
 
@@ -39,14 +39,6 @@ function MenuItems({ menu, categories, setOpenOptions, setOptionsMenuName }) {
   const onClickMoreIcon = (menuName) => {
     setOptionsMenuName(menuName);
     setOpenOptions(true);
-  };
-
-  const onEdit = (oldData, newData) => {
-    if (newData.name in menu) {
-      throw new Error('Name already exist.');
-    }
-
-    editMenu(oldData, newData);
   };
 
   const onDelete = (menuName) => {
@@ -124,7 +116,6 @@ function MenuItems({ menu, categories, setOpenOptions, setOptionsMenuName }) {
       <EditDialog
         open={openEditDialog}
         setOpen={setOpenEditDialog}
-        onEdit={onEdit}
         menuItem={menuItemEditDialog}
         categories={categories}
       />

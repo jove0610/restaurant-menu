@@ -17,7 +17,7 @@ import { addMenu } from '../../../../firebase/menu';
 import HasOptions from './HasOptions';
 import NoOptions from './NoOptions';
 
-function AddMenu({ categories, menu, handleClose }) {
+function AddMenu({ categories, handleClose }) {
   const [hasError, setHasError] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   const [name, setName] = useState('');
@@ -42,16 +42,11 @@ function AddMenu({ categories, menu, handleClose }) {
     return output;
   }, [categories]);
 
-  const onSubmitAdd = (e) => {
+  const onSubmitAdd = async (e) => {
     e.preventDefault();
 
     if (!name.trim()) {
       setErrMessage('Name is empty.');
-      setHasError(true);
-      return;
-    }
-    if (name in menu) {
-      setErrMessage('Name already exist.');
       setHasError(true);
       return;
     }
@@ -77,13 +72,13 @@ function AddMenu({ categories, menu, handleClose }) {
       ];
     }
 
-    addMenu({
-      name,
-      category,
-      options: menuOptions,
-    });
-
-    handleClose();
+    try {
+      await addMenu(name, category, menuOptions);
+      handleClose();
+    } catch (err) {
+      setHasError(true);
+      setErrMessage(err.message);
+    }
   };
 
   return (
@@ -163,12 +158,6 @@ AddMenu.propTypes = {
   categories: PropTypes.objectOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  menu: PropTypes.objectOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      category: PropTypes.string,
     })
   ).isRequired,
   handleClose: PropTypes.func.isRequired,

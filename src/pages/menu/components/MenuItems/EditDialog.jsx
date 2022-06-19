@@ -13,12 +13,14 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 
+import { editMenu } from '../../../../firebase/menu';
+
 /* ----------------------------------------------------------------------------
  | The word "menu" is both singular and plural.The "menu" variable used in 
  | this component refers to the singular menu, kinda like menuItem.
  | ----------------------------------------------------------------------------
  */
-function EditDialog({ open, setOpen, menuItem: menu, onEdit, categories }) {
+function EditDialog({ open, setOpen, menuItem: menu, categories }) {
   const [newMenuName, setNewMenuName] = useState(menu.name);
   const [newCategory, setNewCategory] = useState(menu.category || null);
   const [errMessage, setErrMessage] = useState('');
@@ -40,7 +42,7 @@ function EditDialog({ open, setOpen, menuItem: menu, onEdit, categories }) {
     setNewCategory(menu.category || null);
   };
 
-  const onSubmitEdit = (e) => {
+  const onEdit = async (e) => {
     e.preventDefault();
 
     if (!newMenuName.trim()) {
@@ -53,7 +55,7 @@ function EditDialog({ open, setOpen, menuItem: menu, onEdit, categories }) {
     };
 
     try {
-      onEdit(menu, newMenu);
+      await editMenu(menu, newMenu);
       handleClose();
     } catch (err) {
       setErrMessage(err.message);
@@ -62,7 +64,7 @@ function EditDialog({ open, setOpen, menuItem: menu, onEdit, categories }) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <form onSubmit={onSubmitEdit}>
+      <form onSubmit={onEdit}>
         <DialogTitle>Edit {menu.name}?</DialogTitle>
 
         <Divider />
@@ -110,7 +112,6 @@ function EditDialog({ open, setOpen, menuItem: menu, onEdit, categories }) {
 EditDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
   menuItem: PropTypes.shape({
     name: PropTypes.string.isRequired,
     category: PropTypes.string,
