@@ -21,11 +21,13 @@ import {
   useOptionsByName,
   deleteOptionItem,
 } from '../../../../firebase/options';
+import AddOptionDialog from './AddOptionDialog';
 import DeleteDialog from '../../../../components/DeleteDialog';
 
 function MenuItemOptions({ setOpen, menuName }) {
   const options = useOptionsByName(menuName);
   const [dialogItemName, setDialogItemName] = useState('');
+  const [openAddOption, setOpenAddOption] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const getOptionName = (name) => {
@@ -54,7 +56,17 @@ function MenuItemOptions({ setOpen, menuName }) {
   return (
     <>
       <Dialog open onClose={() => setOpen(false)} scroll="paper">
-        <DialogTitle> Options</DialogTitle>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          pr="1.5em"
+        >
+          <DialogTitle> Options</DialogTitle>
+          <Button variant="outlined" onClick={() => setOpenAddOption(true)}>
+            Add Option
+          </Button>
+        </Stack>
 
         <DialogContent dividers sx={{ width: '30em', maxWidth: '90vw' }}>
           <Stack spacing="1.5em">
@@ -123,6 +135,10 @@ function MenuItemOptions({ setOpen, menuName }) {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {openAddOption && (
+        <AddOptionDialog menuName={menuName} setOpen={setOpenAddOption} />
+      )}
 
       <DeleteDialog
         open={openDeleteDialog}

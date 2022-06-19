@@ -1,5 +1,31 @@
 import { useState, useEffect } from 'react';
-import { getDatabase, ref, onValue, update } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  onValue,
+  update,
+  set,
+  get,
+  child,
+} from 'firebase/database';
+
+export const addOptionItem = async ({
+  menuName,
+  optionName,
+  cost,
+  price,
+  stock,
+}) => {
+  const db = getDatabase();
+  const path = `options/${menuName}/${optionName}`;
+
+  const snapshot = await get(child(ref(db), path));
+  if (snapshot.exists()) {
+    throw new Error('Name already exist.');
+  }
+
+  set(ref(db, path), { name: optionName, cost, price, stock });
+};
 
 export const useOptionsByName = (name = null) => {
   if (name === null) {
