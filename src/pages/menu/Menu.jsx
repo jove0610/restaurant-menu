@@ -6,11 +6,13 @@ import Stack from '@mui/material/Stack';
 
 import { useCategories } from '../../firebase/categories';
 import { useMenu } from '../../firebase/menu';
+import useTitle from '../../hooks/useTitle';
 import AddMenu from './components/AddMenu';
 import MenuItems from './components/MenuItems';
 import MenuItemOptions from './components/MenuItemOptions';
 
 function Menu() {
+  useTitle('Menu');
   const categories = useCategories();
   const menu = useMenu();
   const [openMenu, setOpenMenu] = useState(false);

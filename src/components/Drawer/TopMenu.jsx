@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
@@ -8,7 +9,11 @@ import Typography from '@mui/material/Typography';
 
 import MenuIcon from '@mui/icons-material/Menu';
 
+import { getTitle } from '../../redux/appSlice';
+
 function TopMenu({ drawerWidth, handleDrawerToggle }) {
+  const title = useSelector(getTitle);
+
   return (
     <AppBar
       position="fixed"
@@ -28,7 +33,7 @@ function TopMenu({ drawerWidth, handleDrawerToggle }) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div">
-          Restaurant Menu
+          {title}
         </Typography>
       </Toolbar>
     </AppBar>

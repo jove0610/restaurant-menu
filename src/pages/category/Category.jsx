@@ -8,9 +8,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { addCategory } from '../../firebase/categories';
+import useTitle from '../../hooks/useTitle';
 import CategoryItems from './components/CategoryItems';
 
 function Category() {
+  useTitle('Category');
   const [name, setName] = useState('');
 
   const onSubmitAdd = (e) => {
