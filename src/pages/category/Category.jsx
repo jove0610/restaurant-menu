@@ -14,16 +14,22 @@ import CategoryItems from './components/CategoryItems';
 function Category() {
   useTitle('Category');
   const [name, setName] = useState('');
+  const [errMessage, setErrMessage] = useState('');
 
-  const onSubmitAdd = (e) => {
+  const onSubmitAdd = async (e) => {
     e.preventDefault();
 
     if (!name.trim()) {
       return;
     }
 
-    addCategory({ name });
-    setName('');
+    try {
+      await addCategory(name);
+      setName('');
+      setErrMessage('');
+    } catch (err) {
+      setErrMessage(err.message);
+    }
   };
 
   return (
@@ -42,27 +48,31 @@ function Category() {
       </Divider>
 
       <form onSubmit={onSubmitAdd}>
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing="2em"
-          mt="1em"
-          mb="2em"
-        >
-          <TextField
-            value={name}
-            label="Name"
-            onChange={(e) => setName(e.target.value)}
-            size="small"
-            sx={{ flexGrow: 1 }}
-            required
-          />
-          <Button
-            variant="contained"
-            type="submit"
-            sx={{ width: { xs: '100%', sm: 'fit-content' } }}
-          >
-            Add Category
-          </Button>
+        <Stack mt="1em" mb="1em" spacing="1em">
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing="2em">
+            <TextField
+              value={name}
+              label="Name"
+              onChange={(e) => setName(e.target.value)}
+              size="small"
+              sx={{ flexGrow: 1 }}
+              required
+            />
+
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ width: { xs: '100%', sm: 'fit-content' } }}
+            >
+              Add Category
+            </Button>
+          </Stack>
+
+          {errMessage && (
+            <Typography color="red" textAlign="center">
+              {errMessage}
+            </Typography>
+          )}
         </Stack>
       </form>
 

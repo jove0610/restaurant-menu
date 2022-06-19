@@ -11,7 +11,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 
-function EditDialog({ open, setOpen, categoryName, onEdit }) {
+import { editCategory } from '../../../firebase/categories';
+
+function EditDialog({ open, setOpen, categoryName }) {
   const [newCategoryName, setNewCategoryName] = useState(categoryName);
   const [errMessage, setErrMessage] = useState('');
 
@@ -25,15 +27,12 @@ function EditDialog({ open, setOpen, categoryName, onEdit }) {
     setNewCategoryName(categoryName);
   };
 
-  const onSubmitEdit = (e) => {
+  const onEdit = async (e) => {
     e.preventDefault();
 
-    if (!newCategoryName.trim()) {
-      return;
-    }
-
     try {
-      onEdit(categoryName, newCategoryName);
+      await editCategory(categoryName, newCategoryName);
+      setErrMessage('');
       handleClose();
     } catch (err) {
       setErrMessage(err.message);
@@ -42,7 +41,7 @@ function EditDialog({ open, setOpen, categoryName, onEdit }) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <form onSubmit={onSubmitEdit}>
+      <form onSubmit={onEdit}>
         <DialogTitle>Edit {categoryName}?</DialogTitle>
 
         <Divider />
@@ -84,7 +83,6 @@ EditDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   categoryName: PropTypes.string.isRequired,
-  onEdit: PropTypes.func.isRequired,
 };
 
 export default EditDialog;

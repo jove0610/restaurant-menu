@@ -10,11 +10,7 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import {
-  useCategories,
-  editCategory,
-  deleteCategory,
-} from '../../../firebase/categories';
+import { useCategories, deleteCategory } from '../../../firebase/categories';
 import DeleteDialog from '../../../components/DeleteDialog';
 import EditDialog from './EditDialog';
 
@@ -32,17 +28,6 @@ function CategoryItems() {
   const onClickEditIcon = (categoryName) => {
     setDialogItemName(categoryName);
     setOpenEditDialog(true);
-  };
-
-  const onEdit = (oldName, newName) => {
-    if (newName in categories) {
-      throw new Error('Name already exist.');
-    }
-
-    const oldCategory = categories[oldName];
-    const newCategory = { ...oldCategory, name: newName };
-
-    editCategory(oldCategory, newCategory);
   };
 
   const onDelete = (categoryName) => {
@@ -107,7 +92,6 @@ function CategoryItems() {
         open={openEditDialog}
         setOpen={setOpenEditDialog}
         categoryName={dialogItemName}
-        onEdit={onEdit}
       />
     </>
   );

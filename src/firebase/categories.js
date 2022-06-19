@@ -1,9 +1,24 @@
 import { useState, useEffect } from 'react';
-import { getDatabase, ref, set, onValue, update } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue,
+  update,
+  get,
+  child,
+} from 'firebase/database';
 
-export const addCategory = ({ name }) => {
+export const addCategory = async (name) => {
   const db = getDatabase();
-  set(ref(db, `categories/${name}`), { name });
+  const path = `categories/${name}`;
+
+  const snapshot = await get(child(ref(db), path));
+  if (snapshot.exists()) {
+    throw new Error('Name already exist.');
+  }
+
+  set(ref(db, path), { name });
 };
 
 export const useCategories = () => {
@@ -11,7 +26,7 @@ export const useCategories = () => {
 
   useEffect(() => {
     const db = getDatabase();
-    onValue(ref(db, `categories`), (snapshot) => {
+    onValue(ref(db, 'categories'), (snapshot) => {
       setData(snapshot.val() || {});
     });
   }, []);
@@ -19,12 +34,17 @@ export const useCategories = () => {
   return data;
 };
 
-export const editCategory = (oldData, newData) => {
+export const editCategory = async (oldName, newName) => {
   const db = getDatabase();
-  const updates = {};
-  updates[`/categories/${oldData.name}`] = null;
-  updates[`/categories/${newData.name}`] = newData;
 
+  const snapshot = await get(child(ref(db), `categories/${newName}`));
+  if (snapshot.exists()) {
+    throw new Error('Name already exist.');
+  }
+
+  const updates = {};
+  updates[`/categories/${oldName}`] = null;
+  updates[`/categories/${newName}/name`] = newName;
   update(ref(db), updates);
 };
 
