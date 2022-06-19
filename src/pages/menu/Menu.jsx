@@ -8,11 +8,15 @@ import { useCategories } from '../../firebase/categories';
 import { useMenu } from '../../firebase/menu';
 import AddMenu from './components/AddMenu';
 import MenuItems from './components/MenuItems';
+import MenuItemOptions from './components/MenuItemOptions';
 
 function Menu() {
   const categories = useCategories();
   const menu = useMenu();
   const [openMenu, setOpenMenu] = useState(false);
+  const [openMenuItemOptions, setOpenMenuItemOptions] = useState(false);
+  // name of menu to be used in MenuItemOptions
+  const [optionsMenuName, setOptionsMenuName] = useState('');
 
   const handleCloseMenu = () => {
     setOpenMenu(false);
@@ -37,7 +41,12 @@ function Menu() {
             </Button>
           </Stack>
 
-          <MenuItems menu={menu} categories={categories} />
+          <MenuItems
+            menu={menu}
+            categories={categories}
+            setOptionsMenuName={setOptionsMenuName}
+            setOpenOptions={setOpenMenuItemOptions}
+          />
         </>
       )}
 
@@ -46,6 +55,13 @@ function Menu() {
           categories={categories}
           menu={menu}
           handleClose={handleCloseMenu}
+        />
+      )}
+
+      {openMenuItemOptions && (
+        <MenuItemOptions
+          setOpen={setOpenMenuItemOptions}
+          menuName={optionsMenuName}
         />
       )}
     </Box>

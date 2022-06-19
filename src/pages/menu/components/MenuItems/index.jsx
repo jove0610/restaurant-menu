@@ -17,7 +17,7 @@ import { editMenu, deleteMenu } from '../../../../firebase/menu';
 import DeleteDialog from '../../../../components/DeleteDialog';
 import EditDialog from './EditDialog';
 
-function MenuItems({ menu, categories }) {
+function MenuItems({ menu, categories, setOpenOptions, setOptionsMenuName }) {
   const [dialogItemName, setDialogItemName] = useState('');
   const [menuItemEditDialog, setMenuItemEditDialog] = useState({
     name: '',
@@ -34,6 +34,11 @@ function MenuItems({ menu, categories }) {
   const onClickEditIcon = (menuItem) => {
     setMenuItemEditDialog(menuItem);
     setOpenEditDialog(true);
+  };
+
+  const onClickMoreIcon = (menuName) => {
+    setOptionsMenuName(menuName);
+    setOpenOptions(true);
   };
 
   const onEdit = (oldData, newData) => {
@@ -75,7 +80,10 @@ function MenuItems({ menu, categories }) {
 
                 <Stack direction="row">
                   <Tooltip title="More" arrow>
-                    <IconButton sx={{ color: '#333' }}>
+                    <IconButton
+                      onClick={() => onClickMoreIcon(menuName)}
+                      sx={{ color: '#333' }}
+                    >
                       <MoreIcon />
                     </IconButton>
                   </Tooltip>
@@ -136,6 +144,8 @@ MenuItems.propTypes = {
       category: PropTypes.string,
     })
   ).isRequired,
+  setOptionsMenuName: PropTypes.func.isRequired,
+  setOpenOptions: PropTypes.func.isRequired,
 };
 
 export default MenuItems;
