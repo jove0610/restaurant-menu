@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { red, yellow } from '@mui/material/colors';
@@ -17,10 +17,16 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { useOptionsByName } from '../../../../firebase/options';
+import {
+  useOptionsByName,
+  deleteOptionItem,
+} from '../../../../firebase/options';
+import DeleteDialog from '../../../../components/DeleteDialog';
 
 function MenuItemOptions({ setOpen, menuName }) {
   const options = useOptionsByName(menuName);
+  const [dialogItemName, setDialogItemName] = useState('');
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const getOptionName = (name) => {
     if (name !== '_defaultOptionName') {
@@ -35,77 +41,96 @@ function MenuItemOptions({ setOpen, menuName }) {
     return null;
   };
 
+  const onClickDeleteIcon = (itemName) => {
+    const newItemName = itemName === '_defaultOptionName' ? '' : itemName;
+    setDialogItemName(newItemName);
+    setOpenDeleteDialog(true);
+  };
+
+  const onDelete = (itemName) => {
+    deleteOptionItem(menuName, itemName);
+  };
+
   return (
-    <Dialog open onClose={() => setOpen(false)} scroll="paper">
-      <DialogTitle> Options</DialogTitle>
+    <>
+      <Dialog open onClose={() => setOpen(false)} scroll="paper">
+        <DialogTitle> Options</DialogTitle>
 
-      <DialogContent dividers sx={{ width: '30em', maxWidth: '90vw' }}>
-        <Stack spacing="1.5em">
-          {Object.keys(options).map((key) => {
-            const option = options[key];
+        <DialogContent dividers sx={{ width: '30em', maxWidth: '90vw' }}>
+          <Stack spacing="1.5em">
+            {Object.keys(options).map((key) => {
+              const option = options[key];
 
-            return (
-              <Stack
-                key={option.name}
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Stack>
-                  <Typography fontWeight="bold">
-                    {getOptionName(option.name)}
-                  </Typography>
+              return (
+                <Stack
+                  key={option.name}
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Stack>
+                    <Typography fontWeight="bold">
+                      {getOptionName(option.name)}
+                    </Typography>
 
-                  <Box>
-                    <Chip
-                      label={`Price: ${option.price.toLocaleString()}`}
-                      color="secondary"
-                      sx={{ mr: '0.5em', mt: '0.3em' }}
-                    />
-                    <Chip
-                      label={`Cost: ${option.cost.toLocaleString()}`}
-                      color="secondary"
-                      sx={{ mr: '0.5em', mt: '0.3em' }}
-                    />
-                    <Chip
-                      label={`Stock: ${option.stock.toLocaleString()}`}
-                      color="secondary"
-                      sx={{ mr: '0.5em', mt: '0.3em' }}
-                    />
-                  </Box>
+                    <Box>
+                      <Chip
+                        label={`Price: ${option.price.toLocaleString()}`}
+                        color="secondary"
+                        sx={{ mr: '0.5em', mt: '0.3em' }}
+                      />
+                      <Chip
+                        label={`Cost: ${option.cost.toLocaleString()}`}
+                        color="secondary"
+                        sx={{ mr: '0.5em', mt: '0.3em' }}
+                      />
+                      <Chip
+                        label={`Stock: ${option.stock.toLocaleString()}`}
+                        color="secondary"
+                        sx={{ mr: '0.5em', mt: '0.3em' }}
+                      />
+                    </Box>
+                  </Stack>
+
+                  <Stack direction="row">
+                    <Tooltip title="Edit" arrow>
+                      <IconButton
+                        // onClick={() => onClickEditIcon(categoryName)}
+                        sx={{ color: yellow[800] }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="Delete" arrow>
+                      <IconButton
+                        onClick={() => onClickDeleteIcon(option.name)}
+                        sx={{ color: red[700] }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
                 </Stack>
+              );
+            })}
+          </Stack>
+        </DialogContent>
 
-                <Stack direction="row">
-                  <Tooltip title="Edit" arrow>
-                    <IconButton
-                      // onClick={() => onClickEditIcon(categoryName)}
-                      sx={{ color: yellow[800] }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
+        <DialogActions>
+          <Button variant="contained" onClick={() => setOpen(false)}>
+            Back
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-                  <Tooltip title="Delete" arrow>
-                    <IconButton
-                      // onClick={() => onClickDeleteIcon(categoryName)}
-                      sx={{ color: red[700] }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Stack>
-              </Stack>
-            );
-          })}
-        </Stack>
-      </DialogContent>
-
-      <DialogActions>
-        <Button variant="contained" onClick={() => setOpen(false)}>
-          Back
-        </Button>
-      </DialogActions>
-    </Dialog>
+      <DeleteDialog
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        itemName={dialogItemName}
+        onDelete={onDelete}
+      />
+    </>
   );
 }
 

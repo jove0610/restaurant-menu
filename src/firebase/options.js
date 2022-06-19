@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue, update } from 'firebase/database';
 
 export const useOptionsByName = (name = null) => {
   if (name === null) {
@@ -16,4 +16,12 @@ export const useOptionsByName = (name = null) => {
   }, []);
 
   return data;
+};
+
+export const deleteOptionItem = (menuName, itemName) => {
+  const db = getDatabase();
+  const updates = {};
+  updates[`/options/${menuName}/${itemName}`] = null;
+
+  update(ref(db), updates);
 };
