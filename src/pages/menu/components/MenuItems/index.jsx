@@ -13,16 +13,35 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreIcon from '@mui/icons-material/More';
 
-import { deleteMenu } from '../../../../firebase/menu';
+import { editMenu, deleteMenu } from '../../../../firebase/menu';
 import DeleteDialog from '../../../../components/DeleteDialog';
+import EditDialog from './EditDialog';
 
-function MenuItems({ menu }) {
+function MenuItems({ menu, categories }) {
   const [dialogItemName, setDialogItemName] = useState('');
+  const [menuItemEditDialog, setMenuItemEditDialog] = useState({
+    name: '',
+    category: '',
+  });
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
-  const onClickDeleteIcon = (categoryName) => {
-    setDialogItemName(categoryName);
+  const onClickDeleteIcon = (menuName) => {
+    setDialogItemName(menuName);
     setOpenDeleteDialog(true);
+  };
+
+  const onClickEditIcon = (menuItem) => {
+    setMenuItemEditDialog(menuItem);
+    setOpenEditDialog(true);
+  };
+
+  const onEdit = (oldData, newData) => {
+    if (newData.name in menu) {
+      throw new Error('Name already exist.');
+    }
+
+    editMenu(oldData, newData);
   };
 
   const onDelete = (menuName) => {
@@ -62,7 +81,10 @@ function MenuItems({ menu }) {
                   </Tooltip>
 
                   <Tooltip title="Edit" arrow>
-                    <IconButton sx={{ color: yellow[800] }}>
+                    <IconButton
+                      onClick={() => onClickEditIcon(menu[key])}
+                      sx={{ color: yellow[800] }}
+                    >
                       <EditIcon />
                     </IconButton>
                   </Tooltip>
@@ -90,11 +112,24 @@ function MenuItems({ menu }) {
         itemName={dialogItemName}
         onDelete={onDelete}
       />
+
+      <EditDialog
+        open={openEditDialog}
+        setOpen={setOpenEditDialog}
+        onEdit={onEdit}
+        menuItem={menuItemEditDialog}
+        categories={categories}
+      />
     </>
   );
 }
 
 MenuItems.propTypes = {
+  categories: PropTypes.objectOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   menu: PropTypes.objectOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,

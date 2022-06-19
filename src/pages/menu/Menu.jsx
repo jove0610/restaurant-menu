@@ -37,7 +37,7 @@ function Menu() {
             </Button>
           </Stack>
 
-          <MenuItems menu={menu} />
+          <MenuItems menu={menu} categories={categories} />
         </>
       )}
 

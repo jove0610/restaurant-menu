@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react';
-import { getDatabase, ref, set, onValue, update } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue,
+  update,
+  get,
+  child,
+} from 'firebase/database';
 
 export const addMenu = ({ name, category, options }) => {
   const db = getDatabase();
@@ -31,6 +39,26 @@ export const useMenu = () => {
   }, []);
 
   return data;
+};
+
+export const editMenu = (oldData, newData) => {
+  const db = getDatabase();
+  const updates = {};
+  updates[`/menu/${oldData.name}`] = null;
+  updates[`/menu/${newData.name}`] = newData;
+  updates[`/categories/${oldData.category}/menu/${oldData.name}`] = null;
+  updates[`/categories/${newData.category}/menu/${newData.name}`] = true;
+
+  get(child(ref(db), `options/${oldData.name}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        updates[`/options/${oldData.name}`] = null;
+        updates[`/options/${newData.name}`] = snapshot.val();
+      }
+    })
+    .finally(() => {
+      update(ref(db), updates);
+    });
 };
 
 export const deleteMenu = (data) => {
