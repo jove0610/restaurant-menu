@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/restaurant-menu/static/js/main.40b03104.js",
+    "static/media/company-logo.png": "/restaurant-menu/static/media/company-logo.0f32474cb0a124cf2e5b.png",
+    "index.html": "/restaurant-menu/index.html",
+    "main.40b03104.js.map": "/restaurant-menu/static/js/main.40b03104.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.40b03104.js"
+  ]
+}
