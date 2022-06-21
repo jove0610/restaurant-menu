@@ -15,45 +15,39 @@ function Menu() {
   useTitle('Menu');
   const categories = useCategories();
   const menu = useMenu();
-  const [openMenu, setOpenMenu] = useState(false);
+  const [openAddMenu, setOpenAddMenu] = useState(false);
   const [openMenuItemOptions, setOpenMenuItemOptions] = useState(false);
   // name of menu to be used in MenuItemOptions
   const [optionsMenuName, setOptionsMenuName] = useState('');
 
-  const handleCloseMenu = () => {
-    setOpenMenu(false);
-  };
-
   return (
-    <Box
-      sx={{
-        boxShadow: '0 0 0.7em #777',
-        borderRadius: '1em',
-        padding: '1em',
-        width: '35em',
-        maxWidth: '90vw',
-        mx: 'auto',
-      }}
-    >
-      {!openMenu && (
-        <>
-          <Stack alignItems="flex-end">
-            <Button variant="outlined" onClick={() => setOpenMenu(true)}>
-              Add Menu
-            </Button>
-          </Stack>
+    <>
+      <Box
+        sx={{
+          boxShadow: '0 0 0.7em #777',
+          borderRadius: '1em',
+          padding: '1em',
+          width: '35em',
+          maxWidth: '90vw',
+          mx: 'auto',
+        }}
+      >
+        <Stack alignItems="flex-end">
+          <Button variant="outlined" onClick={() => setOpenAddMenu(true)}>
+            Add Menu
+          </Button>
+        </Stack>
 
-          <MenuItems
-            menu={menu}
-            categories={categories}
-            setOptionsMenuName={setOptionsMenuName}
-            setOpenOptions={setOpenMenuItemOptions}
-          />
-        </>
-      )}
+        <MenuItems
+          menu={menu}
+          categories={categories}
+          setOptionsMenuName={setOptionsMenuName}
+          setOpenOptions={setOpenMenuItemOptions}
+        />
+      </Box>
 
-      {openMenu && (
-        <AddMenu categories={categories} handleClose={handleCloseMenu} />
+      {openAddMenu && (
+        <AddMenu categories={categories} setOpen={setOpenAddMenu} />
       )}
 
       {openMenuItemOptions && (
@@ -62,7 +56,7 @@ function Menu() {
           menuName={optionsMenuName}
         />
       )}
-    </Box>
+    </>
   );
 }
 

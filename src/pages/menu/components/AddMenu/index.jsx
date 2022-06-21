@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import { grey } from '@mui/material/colors';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
@@ -17,7 +20,7 @@ import { addMenu } from '../../../../firebase/menu';
 import HasOptions from './HasOptions';
 import NoOptions from './NoOptions';
 
-function AddMenu({ categories, handleClose }) {
+function AddMenu({ categories, setOpen }) {
   const [hasError, setHasError] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   const [name, setName] = useState('');
@@ -74,7 +77,7 @@ function AddMenu({ categories, handleClose }) {
 
     try {
       await addMenu(name, category, menuOptions);
-      handleClose();
+      setOpen(false);
     } catch (err) {
       setHasError(true);
       setErrMessage(err.message);
@@ -82,75 +85,75 @@ function AddMenu({ categories, handleClose }) {
   };
 
   return (
-    <Stack spacing="1em">
-      <Divider>
-        <Typography variant="body2">Add Menu</Typography>
-      </Divider>
+    <Dialog open onClose={() => setOpen(false)} scroll="paper">
+      <DialogTitle>Add Menu</DialogTitle>
 
-      <form onSubmit={onSubmitAdd}>
-        <Stack spacing="1.5em">
-          <TextField
-            value={name}
-            label="Name"
-            onChange={(e) => setName(e.target.value)}
-            size="small"
-            required
-          />
-
-          <Autocomplete
-            value={category}
-            options={categoriesOptions}
-            onChange={(_, value) => setCategory(value)}
-            sx={{ width: 300 }}
-            size="small"
-            renderInput={(params) => (
-              <TextField required {...params} label="Category" /> // eslint-disable-line
-            )}
-          />
-
-          <Stack direction="row" alignItems="center">
-            <Switch
-              value={options}
-              onChange={(_, value) => setOptions(value)}
+      <DialogContent dividers sx={{ width: '30em', maxWidth: '90vw' }}>
+        <form onSubmit={onSubmitAdd}>
+          <Stack spacing="1.5em">
+            <TextField
+              value={name}
+              label="Name"
+              onChange={(e) => setName(e.target.value)}
+              size="small"
+              required
             />
-            <Typography mr="0.5em">Options</Typography>
 
-            <Tooltip
-              arrow
-              title="Allows this item to have options (i.e. small, medium, large)"
-            >
-              <HelpIcon sx={{ color: grey[600] }} />
-            </Tooltip>
+            <Autocomplete
+              value={category}
+              options={categoriesOptions}
+              onChange={(_, value) => setCategory(value)}
+              sx={{ width: 300 }}
+              size="small"
+              renderInput={(params) => (
+                <TextField required {...params} label="Category" /> // eslint-disable-line
+              )}
+            />
+
+            <Stack direction="row" alignItems="center">
+              <Switch
+                value={options}
+                onChange={(_, value) => setOptions(value)}
+              />
+              <Typography mr="0.5em">Options</Typography>
+
+              <Tooltip
+                arrow
+                title="Allows this item to have options (i.e. small, medium, large)"
+              >
+                <HelpIcon sx={{ color: grey[600] }} />
+              </Tooltip>
+            </Stack>
+
+            {!options && <NoOptions data={noOptions} setData={setNoOptions} />}
+            {options && (
+              <HasOptions data={hasOptions} setData={setHasOptions} />
+            )}
           </Stack>
+        </form>
 
-          {!options && <NoOptions data={noOptions} setData={setNoOptions} />}
-          {options && <HasOptions data={hasOptions} setData={setHasOptions} />}
+        {hasError && (
+          <Typography textAlign="center" color="red">
+            {errMessage}
+          </Typography>
+        )}
+        {!hasError && (
+          <Typography textAlign="center" color="red">
+            &nbsp;
+          </Typography>
+        )}
+      </DialogContent>
 
-          <Divider />
+      <DialogActions>
+        <Button variant="contained" onClick={() => setOpen(false)}>
+          Back
+        </Button>
 
-          <Stack direction="row" spacing="1em" justifyContent="center">
-            <Button onClick={handleClose} variant="outlined">
-              Cancel
-            </Button>
-
-            <Button variant="contained" type="submit">
-              Add Menu
-            </Button>
-          </Stack>
-        </Stack>
-      </form>
-
-      {hasError && (
-        <Typography textAlign="center" color="red">
-          {errMessage}
-        </Typography>
-      )}
-      {!hasError && (
-        <Typography textAlign="center" color="red">
-          &nbsp;
-        </Typography>
-      )}
-    </Stack>
+        <Button variant="contained" type="submit">
+          Add Menu
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
@@ -160,7 +163,7 @@ AddMenu.propTypes = {
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
-  handleClose: PropTypes.func.isRequired,
+  setOpen: PropTypes.func.isRequired,
 };
 
 export default AddMenu;
