@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 
 import { addOptionItem } from '../../../../firebase/options';
 
-function AddOptionDialog({ menuName, setOpen }) {
+function AddOptionDialog({ menuName, setOpen, hasNoOptions }) {
   const [hasError, setHasError] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   const [name, setName] = useState('');
@@ -26,7 +26,7 @@ function AddOptionDialog({ menuName, setOpen }) {
     try {
       await addOptionItem({
         menuName,
-        optionName: name,
+        optionName: name || undefined,
         price,
         cost,
         stock,
@@ -46,13 +46,15 @@ function AddOptionDialog({ menuName, setOpen }) {
 
         <DialogContent dividers>
           <Stack spacing="1em">
-            <TextField
-              value={name}
-              label="Name"
-              onChange={(e) => setName(e.target.value)}
-              size="small"
-              required
-            />
+            {!hasNoOptions && (
+              <TextField
+                value={name}
+                label="Name"
+                onChange={(e) => setName(e.target.value)}
+                size="small"
+                required
+              />
+            )}
 
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing="1em">
               <TextField
@@ -113,6 +115,7 @@ function AddOptionDialog({ menuName, setOpen }) {
 AddOptionDialog.propTypes = {
   menuName: PropTypes.string.isRequired,
   setOpen: PropTypes.func.isRequired,
+  hasNoOptions: PropTypes.bool.isRequired,
 };
 
 export default AddOptionDialog;
