@@ -51,6 +51,10 @@ function MenuItemOptions({ setOpen, menuName }) {
     return null;
   };
 
+  const handleCloseDelDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
   const onClickEditIcon = (option) => {
     setOptionToBeEdited(option);
     setOpenEditOption(true);
@@ -64,6 +68,7 @@ function MenuItemOptions({ setOpen, menuName }) {
 
   const onDelete = (itemName) => {
     deleteOptionItem(menuName, itemName);
+    handleCloseDelDialog();
   };
 
   return (
@@ -163,7 +168,7 @@ function MenuItemOptions({ setOpen, menuName }) {
 
       <DeleteDialog
         open={openDeleteDialog}
-        setOpen={setOpenDeleteDialog}
+        handleClose={handleCloseDelDialog}
         itemName={dialogItemName}
         onDelete={onDelete}
       />

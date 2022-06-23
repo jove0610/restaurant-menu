@@ -10,9 +10,15 @@ import TableCategory from './TableCategory';
 
 function CategoryItems() {
   const categories = useCategories();
+  const [errMessage, setErrMessage] = useState('');
   const [dialogItemName, setDialogItemName] = useState('');
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+
+  const handleCloseDelDialog = () => {
+    setErrMessage('');
+    setOpenDeleteDialog(false);
+  };
 
   const onClickDeleteIcon = (categoryName) => {
     setDialogItemName(categoryName);
@@ -24,8 +30,13 @@ function CategoryItems() {
     setOpenEditDialog(true);
   };
 
-  const onDelete = (categoryName) => {
-    deleteCategory(categories[categoryName]);
+  const onDelete = async (categoryName) => {
+    try {
+      await deleteCategory(categories[categoryName]);
+      handleCloseDelDialog();
+    } catch (err) {
+      setErrMessage(err.message);
+    }
   };
 
   return (
@@ -42,9 +53,10 @@ function CategoryItems() {
 
       <DeleteDialog
         open={openDeleteDialog}
-        setOpen={setOpenDeleteDialog}
+        handleClose={handleCloseDelDialog}
         itemName={dialogItemName}
         onDelete={onDelete}
+        errMessage={errMessage}
       />
 
       <EditDialog

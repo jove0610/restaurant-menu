@@ -66,14 +66,11 @@ export const editMenu = async (oldData, newData) => {
 
 export const deleteMenu = (data) => {
   const db = getDatabase();
+
   const updates = {};
   updates[`/menu/${data.name}`] = null;
   updates[`/options/${data.name}`] = null;
-
-  if ('category' in data) {
-    updates[`/category/${data.category}/menu/${data.name}`] = null;
-  }
-  updates[`/categories/${data.name}`] = null;
+  updates[`/categories/${data.category}/menu/${data.name}`] = null;
 
   update(ref(db), updates);
 };

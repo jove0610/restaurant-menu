@@ -48,16 +48,22 @@ export const editCategory = async (oldName, newName) => {
   update(ref(db), updates);
 };
 
-export const deleteCategory = (data) => {
+export const deleteCategory = async (data) => {
   const db = getDatabase();
-  const updates = {};
-  updates[`/categories/${data.name}`] = null;
 
-  if ('menu' in data) {
-    Object.keys(data.menu).forEach((menuName) => {
-      updates[`/menu/${menuName}/category`] = null;
-    });
+  const snapshot = await get(child(ref(db), `/categories/${data.name}/menu`));
+  if (snapshot.exists()) {
+    throw new Error('This category is being used.');
   }
+
+  const updates = {};
+  // updates[`/categories/${data.name}`] = null;
+
+  // if ('menu' in data) {
+  //   Object.keys(data.menu).forEach((menuName) => {
+  //     updates[`/menu/${menuName}/category`] = null;
+  //   });
+  // }
   updates[`/categories/${data.name}`] = null;
 
   update(ref(db), updates);

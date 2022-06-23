@@ -18,6 +18,10 @@ function MenuItems({ menu, categories, setOpenOptions, setOptionsMenuName }) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
+  const handleCloseDelDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
   const onClickDeleteIcon = (menuName) => {
     setDialogItemName(menuName);
     setOpenDeleteDialog(true);
@@ -35,6 +39,7 @@ function MenuItems({ menu, categories, setOpenOptions, setOptionsMenuName }) {
 
   const onDelete = (menuName) => {
     deleteMenu(menu[menuName]);
+    handleCloseDelDialog();
   };
 
   return (
@@ -52,7 +57,7 @@ function MenuItems({ menu, categories, setOpenOptions, setOptionsMenuName }) {
 
       <DeleteDialog
         open={openDeleteDialog}
-        setOpen={setOpenDeleteDialog}
+        handleClose={handleCloseDelDialog}
         itemName={dialogItemName}
         onDelete={onDelete}
       />

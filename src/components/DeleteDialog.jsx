@@ -8,15 +8,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 
-function DeleteDialog({ open, setOpen, itemName, onDelete }) {
+function DeleteDialog({ open, handleClose, itemName, onDelete, errMessage }) {
   const onClickDelete = () => {
-    setOpen(false);
     onDelete(itemName);
   };
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Delete {itemName}?</DialogTitle>
 
       <Divider />
@@ -27,8 +27,12 @@ function DeleteDialog({ open, setOpen, itemName, onDelete }) {
         </DialogContentText>
       </DialogContent>
 
+      <Typography color="red" textAlign="center">
+        {errMessage}
+        &nbsp;
+      </Typography>
       <DialogActions>
-        <Button variant="outlined" onClick={() => setOpen(false)}>
+        <Button variant="outlined" onClick={handleClose}>
           Cancel
         </Button>
         <Button variant="contained" color="error" onClick={onClickDelete}>
@@ -41,9 +45,14 @@ function DeleteDialog({ open, setOpen, itemName, onDelete }) {
 
 DeleteDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
   itemName: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
+  errMessage: PropTypes.string,
+};
+
+DeleteDialog.defaultProps = {
+  errMessage: '',
 };
 
 export default DeleteDialog;
