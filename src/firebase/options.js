@@ -11,7 +11,7 @@ import {
 
 export const addOptionItem = async ({
   menuName,
-  optionName,
+  optionName = '_defaultOptionName',
   cost,
   price,
   stock,

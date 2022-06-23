@@ -24,6 +24,7 @@ import {
 import AddOptionDialog from './AddOptionDialog';
 import DeleteDialog from '../../../../components/DeleteDialog';
 import EditOptionDialog from './EditOptionDialog';
+import NoOptionsForm from './NoOptionsForm';
 
 function MenuItemOptions({ setOpen, menuName }) {
   const options = useOptionsByName(menuName);
@@ -144,6 +145,10 @@ function MenuItemOptions({ setOpen, menuName }) {
                 </Stack>
               );
             })}
+
+            {Object.keys(options).length === 0 && (
+              <NoOptionsForm menuName={menuName} />
+            )}
           </Stack>
         </DialogContent>
 
