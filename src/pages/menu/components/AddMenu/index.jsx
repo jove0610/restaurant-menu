@@ -86,10 +86,10 @@ function AddMenu({ categories, setOpen }) {
 
   return (
     <Dialog open onClose={() => setOpen(false)} scroll="paper">
-      <DialogTitle>Add Menu</DialogTitle>
+      <form onSubmit={onSubmitAdd}>
+        <DialogTitle>Add Menu</DialogTitle>
 
-      <DialogContent dividers sx={{ width: '30em', maxWidth: '90vw' }}>
-        <form onSubmit={onSubmitAdd}>
+        <DialogContent dividers sx={{ width: '30em', maxWidth: '90vw' }}>
           <Stack spacing="1.5em">
             <TextField
               value={name}
@@ -130,29 +130,29 @@ function AddMenu({ categories, setOpen }) {
               <HasOptions data={hasOptions} setData={setHasOptions} />
             )}
           </Stack>
-        </form>
 
-        {hasError && (
-          <Typography textAlign="center" color="red">
-            {errMessage}
-          </Typography>
-        )}
-        {!hasError && (
-          <Typography textAlign="center" color="red">
-            &nbsp;
-          </Typography>
-        )}
-      </DialogContent>
+          {hasError && (
+            <Typography textAlign="center" color="red">
+              {errMessage}
+            </Typography>
+          )}
+          {!hasError && (
+            <Typography textAlign="center" color="red">
+              &nbsp;
+            </Typography>
+          )}
+        </DialogContent>
 
-      <DialogActions>
-        <Button variant="contained" onClick={() => setOpen(false)}>
-          Back
-        </Button>
+        <DialogActions>
+          <Button variant="contained" onClick={() => setOpen(false)}>
+            Back
+          </Button>
 
-        <Button variant="contained" type="submit">
-          Add Menu
-        </Button>
-      </DialogActions>
+          <Button variant="contained" type="submit">
+            Add Menu
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }
